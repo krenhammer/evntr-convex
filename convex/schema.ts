@@ -6,6 +6,7 @@ const applicationTables = {
   // Games table - main game entities
   games: defineTable({
     owner_id: v.id("users"),
+    game_team_id: v.optional(v.id("game_teams")),
     name: v.string(),
     description: v.optional(v.string()),
     game_type: v.string(),
