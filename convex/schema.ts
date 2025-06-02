@@ -229,8 +229,8 @@ const applicationTables = {
 
     // Users table - basic user information (you may want to extend this)
     users: defineTable({
-        name: v.string(),
-        email: v.optional(v.string()),
+        name: v.optional(v.string()),
+        email: v.string(),
         avatar_url: v.optional(v.string()),
         created_at: v.number(), // timestamp
         updated_at: v.optional(v.number()), // timestamp

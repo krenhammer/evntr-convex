@@ -14,7 +14,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "paths": {
+      "@/components/*": ["src/components/*"],
+      "@/*": ["src/*"]
+    }
   },
   "include": ["./src"]
 }

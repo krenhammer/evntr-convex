@@ -41,25 +41,38 @@ const postsid = createRoute({
     createLazyRoute("/posts/$id")({ component: m.default }),
   ),
 );
-const auth = createRoute({ getParentRoute: () => root, id: "auth" }).lazy(() =>
-  import("./pages/(auth)/_layout").then((m) =>
-    createLazyRoute("/auth")({ component: m.default }),
+const auth = createRoute({ getParentRoute: () => root, path: "auth" }).lazy(
+  () =>
+    import("./pages/auth/_layout").then((m) =>
+      createLazyRoute("/auth")({ component: m.default }),
+    ),
+);
+const authsignup = createRoute({
+  getParentRoute: () => auth,
+  path: "sign-up",
+}).lazy(() =>
+  import("./pages/auth/sign-up").then((m) =>
+    createLazyRoute("/auth/sign-up")({ component: m.default }),
   ),
 );
-const authregister = createRoute({
-  getParentRoute: () => auth,
-  path: "register",
+const app = createRoute({ getParentRoute: () => root, path: "app" });
+const appevents = createRoute({
+  getParentRoute: () => app,
+  path: "events",
 }).lazy(() =>
-  import("./pages/(auth)/register").then((m) =>
-    createLazyRoute("/auth/register")({ component: m.default }),
+  import("./pages/app/events/_layout").then((m) =>
+    createLazyRoute("/app/events")({ component: m.default }),
   ),
 );
-const authlogin = createRoute({
-  getParentRoute: () => auth,
-  path: "login",
+const appeventsid = createRoute({
+  getParentRoute: () => appevents,
+  path: "$id",
+  // @ts-ignore
+  loader: (...args) =>
+    import("./pages/app/events/[id]").then((m) => m.Loader(...args)),
 }).lazy(() =>
-  import("./pages/(auth)/login").then((m) =>
-    createLazyRoute("/auth/login")({ component: m.default }),
+  import("./pages/app/events/[id]").then((m) =>
+    createLazyRoute("/app/events/$id")({ component: m.default }),
   ),
 );
 const about = createRoute({ getParentRoute: () => root, path: "about" }).lazy(
@@ -85,7 +98,8 @@ const index = createRoute({
 
 const config = root.addChildren([
   posts.addChildren([postsindex, postsid]),
-  auth.addChildren([authregister, authlogin]),
+  auth.addChildren([authsignup]),
+  app.addChildren([appevents.addChildren([appeventsid])]),
   about,
   index,
   _404,
