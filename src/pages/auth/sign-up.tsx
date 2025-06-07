@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Github, Loader2, Check, X } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { useAuth } from "@/auth/use-auth-hooks.convex";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 // Test mode - set to true for relaxed password requirements
 const TEST_MODE = true;
@@ -47,12 +48,22 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [step, setStep] = useState<"signUp" | { email: string }>("signUp");
+  
+  // Check if signup is disabled
+  const isSignupDisabled = useFeatureFlag("disable_signup");
 
   // Redirect if already signed in
   if (isSignedIn) {
     navigate({ to: "/" });
     return null;
   }
+
+  // Redirect to waitlist if signup is disabled
+  useEffect(() => {
+    if (isSignupDisabled) {
+      navigate({ to: "/auth/waitlist" });
+    }
+  }, [isSignupDisabled, navigate]);
 
   const handleEmailPasswordSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -384,18 +395,18 @@ export default function SignUpPage() {
               <Checkbox
                 id="terms"
                 checked={acceptTerms}
-                onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                onCheckedChange={(checked: boolean) => setAcceptTerms(checked)}
                 disabled={isLoading}
               />
               <Label htmlFor="terms" className="text-sm">
                 I agree to the{" "}
-                <Link to="/terms" className="text-primary hover:underline">
+                <a href="/terms" className="text-primary hover:underline">
                   Terms of Service
-                </Link>{" "}
+                </a>{" "}
                 and{" "}
-                <Link to="/privacy" className="text-primary hover:underline">
+                <a href="/privacy" className="text-primary hover:underline">
                   Privacy Policy
-                </Link>
+                </a>
               </Label>
             </div>
 
@@ -416,9 +427,9 @@ export default function SignUpPage() {
         <CardFooter>
           <div className="text-center text-sm text-muted-foreground w-full">
             Already have an account?{" "}
-            <Link to="/auth/sign-in" className="font-medium text-primary hover:underline">
+            <a href="/auth/sign-in" className="font-medium text-primary hover:underline">
               Sign in
-            </Link>
+            </a>
           </div>
         </CardFooter>
       </Card>

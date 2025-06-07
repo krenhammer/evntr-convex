@@ -11,13 +11,8 @@ export const getFeatureFlag = query({
       .withIndex("by_key", (q) => q.eq("key", args.key))
       .unique();
 
-    // Default values for known flags
-    const defaults: Record<string, boolean> = {
-      "open_registration": true, // Enable direct sign-in by default
-      "waitlist_enabled": false,   // Disable waitlist by default
-    };
 
-    return flag?.value ?? defaults[args.key] ?? false;
+    return flag?.value ?? false;
   },
 });
 
@@ -94,6 +89,11 @@ export const getAllFeatureFlags = query({
         key: "waitlist_enabled",
         value: false, // Disable waitlist by default
         description: "Enable waitlist signup for beta access",
+      },
+      {
+        key: "disable_signup",
+        value: false, // Allow signup by default
+        description: "Disable user signup and redirect to waitlist",
       },
     ];
 

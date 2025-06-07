@@ -47,6 +47,14 @@ const auth = createRoute({ getParentRoute: () => root, path: "auth" }).lazy(
       createLazyRoute("/auth")({ component: m.default }),
     ),
 );
+const authwaitlist = createRoute({
+  getParentRoute: () => auth,
+  path: "waitlist",
+}).lazy(() =>
+  import("./pages/auth/waitlist").then((m) =>
+    createLazyRoute("/auth/waitlist")({ component: m.default }),
+  ),
+);
 const authsignup = createRoute({
   getParentRoute: () => auth,
   path: "sign-up",
@@ -98,7 +106,7 @@ const index = createRoute({
 
 const config = root.addChildren([
   posts.addChildren([postsindex, postsid]),
-  auth.addChildren([authsignup]),
+  auth.addChildren([authwaitlist, authsignup]),
   app.addChildren([appevents.addChildren([appeventsid])]),
   about,
   index,

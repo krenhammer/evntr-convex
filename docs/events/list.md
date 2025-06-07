@@ -27,3 +27,4 @@ where-to-have-event
 who-brings-what
 who-knows-someone-best
 word-scramble
+mafia

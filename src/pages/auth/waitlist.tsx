@@ -10,10 +10,12 @@ import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useMutation } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
 
 
 
-function WaitlistPage() {
+export default function WaitlistPage() {
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -25,6 +27,8 @@ function WaitlistPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
+  
+  const joinWaitlist = useMutation(api.waitlist.joinWaitlist)
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -36,23 +40,18 @@ function WaitlistPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      await joinWaitlist({
+        email: formData.email,
+        name: formData.firstName && formData.lastName 
+          ? `${formData.firstName} ${formData.lastName}` 
+          : formData.firstName || formData.lastName || undefined,
+        company: formData.company || undefined,
+        reason: formData.useCase || undefined,
       })
-
-      const result = await response.json()
-
-      if (result.success) {
-        setIsSubmitted(true)
-      } else {
-        setError(result.message || 'Failed to join waitlist. Please try again.')
-      }
+      
+      setIsSubmitted(true)
     } catch (err: any) {
-      setError('Failed to join waitlist. Please try again.')
+      setError(err.message || 'Failed to join waitlist. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -227,7 +226,7 @@ function WaitlistPage() {
               <Label htmlFor="role">Role</Label>
               <Select
                 value={formData.role}
-                onValueChange={(value) => handleInputChange('role', value)}
+                onValueChange={(value: string) => handleInputChange('role', value)}
                 disabled={isLoading}
               >
                 <SelectTrigger>
@@ -266,9 +265,9 @@ function WaitlistPage() {
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-sm text-center text-muted-foreground">
             Already have an account?{' '}
-            <Link to="/login" className="text-primary hover:underline">
+            <a href="/auth/sign-in" className="text-primary hover:underline">
               Sign in
-            </Link>
+            </a>
           </div>
           <div className="text-xs text-center text-muted-foreground">
             By joining, you agree to receive updates about our product launch.
@@ -278,4 +277,4 @@ function WaitlistPage() {
       </Card>
     </div>
   )
-} 
+}
