@@ -8,9 +8,9 @@ import { routerWithQueryClient } from '@tanstack/react-router-with-query'
 import toast from 'react-hot-toast'
 import { ConvexQueryClient } from '@convex-dev/react-query'
 import { ConvexProvider, ConvexReactClient } from 'convex/react'
-import { routeTree } from './routeTree.gen'
-import { DefaultCatchBoundary } from './components/DefaultCatchBoundary'
-import { NotFound } from './components/NotFound'
+import { routes } from './routes.gen'
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+import { NotFound } from '@/components/NotFound'
 
 export function createRouter() {
   if (typeof document !== 'undefined') {

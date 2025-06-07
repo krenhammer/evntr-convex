@@ -1,4 +1,3 @@
-
 import { LoaderFnContext, useMatch } from '@tanstack/react-router'
 
 export const Loader = (context: LoaderFnContext) => {
@@ -6,7 +5,6 @@ export const Loader = (context: LoaderFnContext) => {
   return context.params
 }
 
-export function events() {
-
+export default function EventsIndex() {
   return <div>Welcome to Events</div>;
 }

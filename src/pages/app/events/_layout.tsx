@@ -1,9 +1,10 @@
 import { Outlet } from '@tanstack/react-router'
-import { SignIn } from '../../auth/sign-in';
+import { useAuth } from '@/auth/use-auth-hooks.convex';
+import SignIn from '../../auth/sign-in';
 
-export default function About() {
-
+export default function EventsLayout() {
   const { isAuthenticated, user } = useAuth();
+  
   if (!isAuthenticated) {
     return <SignIn />;
   }

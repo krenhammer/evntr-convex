@@ -41,23 +41,6 @@ const postsid = createRoute({
     createLazyRoute("/posts/$id")({ component: m.default }),
   ),
 );
-const events = createRoute({ getParentRoute: () => root, path: "events" }).lazy(
-  () =>
-    import("./pages/events/_layout").then((m) =>
-      createLazyRoute("/events")({ component: m.default }),
-    ),
-);
-const eventsid = createRoute({
-  getParentRoute: () => events,
-  path: "$id",
-  // @ts-ignore
-  loader: (...args) =>
-    import("./pages/events/[id]").then((m) => m.Loader(...args)),
-}).lazy(() =>
-  import("./pages/events/[id]").then((m) =>
-    createLazyRoute("/events/$id")({ component: m.default }),
-  ),
-);
 const auth = createRoute({ getParentRoute: () => root, path: "auth" }).lazy(
   () =>
     import("./pages/auth/_layout").then((m) =>
@@ -78,6 +61,45 @@ const authsignup = createRoute({
 }).lazy(() =>
   import("./pages/auth/sign-up").then((m) =>
     createLazyRoute("/auth/sign-up")({ component: m.default }),
+  ),
+);
+const authsignin = createRoute({
+  getParentRoute: () => auth,
+  path: "sign-in",
+}).lazy(() =>
+  import("./pages/auth/sign-in").then((m) =>
+    createLazyRoute("/auth/sign-in")({ component: m.default }),
+  ),
+);
+const app = createRoute({ getParentRoute: () => root, path: "app" });
+const appevents = createRoute({
+  getParentRoute: () => app,
+  path: "events",
+}).lazy(() =>
+  import("./pages/app/events/_layout").then((m) =>
+    createLazyRoute("/app/events")({ component: m.default }),
+  ),
+);
+const appeventsindex = createRoute({
+  getParentRoute: () => appevents,
+  path: "/",
+  // @ts-ignore
+  loader: (...args) =>
+    import("./pages/app/events/index").then((m) => m.Loader(...args)),
+}).lazy(() =>
+  import("./pages/app/events/index").then((m) =>
+    createLazyRoute("/app/events")({ component: m.default }),
+  ),
+);
+const appeventsid = createRoute({
+  getParentRoute: () => appevents,
+  path: "$id",
+  // @ts-ignore
+  loader: (...args) =>
+    import("./pages/app/events/[id]").then((m) => m.Loader(...args)),
+}).lazy(() =>
+  import("./pages/app/events/[id]").then((m) =>
+    createLazyRoute("/app/events/$id")({ component: m.default }),
   ),
 );
 const about = createRoute({ getParentRoute: () => root, path: "about" }).lazy(
@@ -103,8 +125,8 @@ const index = createRoute({
 
 const config = root.addChildren([
   posts.addChildren([postsindex, postsid]),
-  events.addChildren([eventsid]),
-  auth.addChildren([authwaitlist, authsignup]),
+  auth.addChildren([authwaitlist, authsignup, authsignin]),
+  app.addChildren([appevents.addChildren([appeventsindex, appeventsid])]),
   about,
   index,
   _404,

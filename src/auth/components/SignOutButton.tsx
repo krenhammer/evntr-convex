@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Button } from "../../components/ui/button";
-import { LogoutIcon } from "../../icons/icons";
+import { Button } from "@/components/ui/button";
+import { LogOutIcon } from "lucide-react";
 
 export interface SignOutButtonProps {
   children?: React.ReactNode;
@@ -39,7 +39,7 @@ export function SignOutButton({
   // Default button when no children provided
   return (
     <Button onClick={handleSignOut} variant="outline" {...props}>
-      <LogoutIcon />
+      <LogOutIcon />
       Sign Out
     </Button>
   );

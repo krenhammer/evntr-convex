@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Button } from "../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 export interface SignInButtonProps {
