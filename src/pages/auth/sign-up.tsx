@@ -38,7 +38,7 @@ const passwordRequirements: PasswordRequirement[] = TEST_MODE ? [
 
 export default function SignUpPage() {
   const { signIn } = useAuthActions();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -53,8 +53,21 @@ export default function SignUpPage() {
   const isSignupDisabled = useFeatureFlag("disable_signup");
 
   // Redirect if already signed in
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      navigate({ to: "/" });
+    }
+  }, [isSignedIn, isLoaded, navigate]);
+
+  // Show loading while auth state is being determined
+  if (!isLoaded) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div>Loading...</div>
+    </div>;
+  }
+
+  // Don't render anything if already signed in (but auth is loaded)
   if (isSignedIn) {
-    navigate({ to: "/" });
     return null;
   }
 

@@ -3,9 +3,9 @@ import { useAuth } from '@/auth/use-auth-hooks.convex';
 import SignIn from '../../auth/sign-in';
 
 export default function EventsLayout() {
-  const { isAuthenticated, user } = useAuth();
+  const { isSignedIn, user } = useAuth();
   
-  if (!isAuthenticated) {
+  if (!isSignedIn) {
     return <SignIn />;
   }
 

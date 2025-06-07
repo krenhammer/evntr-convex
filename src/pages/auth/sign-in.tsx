@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ export default function SignInPage() {
   // const signIn = function(strategy: string, options?: any) {
   //   console.log("signIn", strategy, options);
   // }
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -32,8 +32,21 @@ export default function SignInPage() {
   const [step, setStep] = useState<"signIn" | "forgotPassword" | { email: string }>("signIn");
 
   // Redirect if already signed in
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      navigate({ to: "/" });
+    }
+  }, [isSignedIn, isLoaded, navigate]);
+
+  // Show loading while auth state is being determined
+  if (!isLoaded) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div>Loading...</div>
+    </div>;
+  }
+
+  // Don't render anything if already signed in (but auth is loaded)
   if (isSignedIn) {
-    navigate({ to: "/" });
     return null;
   }
 
