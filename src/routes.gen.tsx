@@ -71,7 +71,11 @@ const authsignin = createRoute({
     createLazyRoute("/auth/sign-in")({ component: m.default }),
   ),
 );
-const app = createRoute({ getParentRoute: () => root, path: "app" });
+const app = createRoute({ getParentRoute: () => root, path: "app" }).lazy(() =>
+  import("./pages/app/_layout").then((m) =>
+    createLazyRoute("/app")({ component: m.default }),
+  ),
+);
 const appevents = createRoute({
   getParentRoute: () => app,
   path: "events",
