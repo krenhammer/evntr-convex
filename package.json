@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "docker:dev": "./docker-run.sh"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.22",

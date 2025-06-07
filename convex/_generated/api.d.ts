@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as auth from "../auth.js";
+import type * as auth_guards from "../auth_guards.js";
 import type * as featureFlags from "../featureFlags.js";
 import type * as http from "../http.js";
 import type * as rbac from "../rbac.js";
@@ -32,6 +33,7 @@ import type * as waitlist from "../waitlist.js";
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  auth_guards: typeof auth_guards;
   featureFlags: typeof featureFlags;
   http: typeof http;
   rbac: typeof rbac;
