@@ -10,5 +10,8 @@ export default defineConfig({
       '@/components': path.resolve(__dirname, './src/components'),
       '@': path.resolve(__dirname, './src')
     }
-  }
+  },
+  server: {
+    allowedHosts: ['eventr.cmdpr.dev'],
+  },
 })
